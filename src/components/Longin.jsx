@@ -1,10 +1,19 @@
-import React, { useReducer } from 'react'
+import React, { useContext, useReducer } from 'react'
 import { authReducer, initialState } from '../reducers/authReducer'
 import {login,logout} from '../actions/authAction'
+import { UserContext } from './UseContext'
 
 const Longin = () => {
 
+    const {isAuth,setIsAuth} = useContext(UserContext)
+
     const [state, dispatch] = useReducer(authReducer, initialState)
+
+    const handleLogin = (params) => {
+        dispatch(login('123','Silvia García'))
+        setIsAuth(true)
+    }
+    
 
     console.log(state)
     return (
@@ -15,15 +24,16 @@ const Longin = () => {
             {state.name}
             {state.uid}
             </p>
+            <br />
+            <p>{isAuth}</p>
             <button 
                 className="btn btn-primary" 
-                onClick={()=>dispatch(login('12345','Silvia Garcia'))}
+                onClick={handleLogin}
             >
                 Login
             </button>
             <button 
                 className="btn btn-danger" 
-                onClick={()=>dispatch(logout())}
             >
                 Logout
             </button>

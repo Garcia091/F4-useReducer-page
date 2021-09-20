@@ -1,23 +1,38 @@
-import React from 'react'
+import React, { useContext, useState } from 'react'
 import {
     HashRouter as Router,
-    Switch,
-    Route,
-    Link
-  } from "react-router-dom";
+    Switch
+} from "react-router-dom";
+
 import Counter from '../components/Counter';
-import Longin from '../components/Longin';
-import Navbar from '../components/Navbar';
+import { UserContext } from '../components/UseContext';
+import AuthRouter from './AuthRouter';
+import { PrivateRoute } from './PrivateRoute';
+import { PublicRoute } from './PublicRoute'
 
 const AppRouter = () => {
+
+
+
+    const [isAuth, setIsAuth] = useState(false)
+
     return (
-        <Router>
-            <Navbar />
-           <Switch>
-            <Route exact path="/" component={Counter}/>
-            <Route path="/login" component={Longin}/>
-           </Switch>
-        </Router>
+        <UserContext.Provider value={{ isAuth, setIsAuth }}>
+            <Router>
+                <Switch>
+                    <PublicRoute
+                        path="/auth"
+                        component={AuthRouter}
+                        isAuthenticated={isAuth}
+                    />
+                    <PrivateRoute
+                        path="/"
+                        component={Counter}
+                        isAuthenticated={isAuth}
+                    />
+                </Switch>
+            </Router>
+        </UserContext.Provider >
     )
 }
 
